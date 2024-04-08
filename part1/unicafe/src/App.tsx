@@ -12,17 +12,26 @@ const Button = props => (
 
 // display the statistics
 const Statistics = ({good,neutral,bad}) => {
-  return (
-    <div>
-      <Title value="statistics"/>
-      <Data value={good} text="good"/>
-      <Data value={neutral} text="neutral"/>
-      <Data value={bad} text="bad"/>
-      <Data value={good+neutral+bad} text="all"/>
-      <Data value={(good-bad)/(good+neutral+bad)} text="average"/>
-      <Data value={good/(good+neutral+bad)*(100)+'%'} text="positive"/>
-    </div>
-  )
+  if ((good+neutral+bad)==0) {
+    return (
+      <div>
+        <Title value="statistics"/>
+        <div>No feedback given</div>
+      </div>
+      )
+  } else {
+    return (
+      <div>
+        <Title value="statistics"/>
+        <Data value={good} text="good"/>
+        <Data value={neutral} text="neutral"/>
+        <Data value={bad} text="bad"/>
+        <Data value={good+neutral+bad} text="all"/>
+        <Data value={(good-bad)/(good+neutral+bad)} text="average"/>
+        <Data value={good/(good+neutral+bad)*(100)+'%'} text="positive"/>
+      </div>
+    )
+  }
 }
 
 const App = () => {
