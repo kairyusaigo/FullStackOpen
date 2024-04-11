@@ -3,12 +3,15 @@ import React from 'react'
 const Header = ({text, id}) => <h1 key={id}>{text}</h1>
 
 const Part = ({parts}) => {
+
+  const total = parts.reduce((accum, current)  => accum+current.exercises, 0)
+  
   return (
     <div>
       {parts.map(part => 
         <p key={part.id}>{part.name} {part.exercises}</p>
       )}
-      <p><b>total of {parts.reduce((accum, current)  => accum+current.exercises, 0)} exercises</b></p>
+      <p><b>total of {total} exercises</b></p>
     </div>
   )
 }
