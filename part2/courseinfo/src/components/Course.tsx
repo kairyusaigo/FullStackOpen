@@ -8,15 +8,12 @@ const Part = ({parts}) => {
       {parts.map(part => 
         <p key={part.id}>{part.name} {part.exercises}</p>
       )}
+      <p><b>total of {parts.reduce((accum, current)  => accum+current.exercises, 0)} exercises</b></p>
     </div>
   )
 }
 
 const Course = ({course}) => {
-  console.log(course)
-  console.log('course: id' ,course.id, 'name', course.name)
-  const list = course
-  console.log('list: id' ,list.id)
 
   return (
     <div>
