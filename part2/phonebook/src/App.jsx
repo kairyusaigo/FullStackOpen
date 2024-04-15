@@ -30,11 +30,19 @@ const App = () => {
       number: newNumber
     }
 
-    const isFound = persons.some(person=> person.name === newName)
+    const isFound = persons.some(person => person.name === newName)
     if (isFound) {
-      alert(`${newName} is already added to phonebook`);
+      const currentPerson = persons.find(person => person.name === newName)
+      console.log (currentPerson)
+      const question = `${newName} is already added to phonebook, replace the old number with a new one?`
+      if (window.confirm(question)) {
+        personsServices
+          .update(currentPerson.id, personObject)
+          .then(returnPersons => {
+            setPersons(persons.map(person => person.id !== currentPerson.id ? person : returnPersons))
+          })
+      }
     } else {
-      // setPersons(persons.concat(personObject))
       personsServices
         .create(personObject)
         .then(returnPersons => {
@@ -47,17 +55,16 @@ const App = () => {
   }
 
   const removePerson = (id) => {
-    const personObject = persons.find(p => p.id === id)
+    const personObject = persons.find(person => person.id === id)
     const question = 'Delete ' + `${personObject.name}` + '?'
     if (window.confirm(question)) {
       personsServices
-          .remove(id, personObject)
-          .then(returnPersons => {
-            console.log('Removed:', returnPersons.name)
-            setPersons(persons.filter(person => person.id !== id))
-          })
+        .remove(id, personObject)
+        .then(returnPersons => {
+          console.log('Removed:', returnPersons.name)
+          setPersons(persons.filter(person => person.id !== id))
+        })
     }
-    
   }
 
   return (
