@@ -2,13 +2,17 @@ import { useState, useEffect } from 'react'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
+import Notification from './components/Notification'
 import personsServices from './services/persons'
+
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [message, setMessage] = useState('')
+  const [isError, setError] = useState(false)
 
   useEffect(() => {
     console.log('effect')
@@ -40,6 +44,7 @@ const App = () => {
           .update(currentPerson.id, personObject)
           .then(returnPersons => {
             setPersons(persons.map(person => person.id !== currentPerson.id ? person : returnPersons))
+            showMessage('Updated '+ `${returnPersons.name}`, false)
           })
       }
     } else {
@@ -48,6 +53,7 @@ const App = () => {
         .then(returnPersons => {
           console.log(returnPersons)
           setPersons(personToShow.concat(returnPersons))
+          showMessage('Added '+ `${returnPersons.name}`, false)
         })
       setNewName('')
       setNewNumber('')
@@ -63,13 +69,28 @@ const App = () => {
         .then(returnPersons => {
           console.log('Removed:', returnPersons.name)
           setPersons(persons.filter(person => person.id !== id))
+          showMessage('Deleted '+ `${returnPersons.name}`, false)
+        })
+        .catch(error => {
+          console.log('catch')
+          setPersons(persons.filter(person => person.id !== id))
+          showMessage('Information of ' + `${personObject.name}` + ' has already been removed from server', true)
         })
     }
+  }
+
+  const showMessage = (message, isError) => {
+    setError(isError)
+    setMessage(message)
+    setTimeout(() => {
+      setMessage('')
+    },5000)
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} isError={isError}/>
       <Filter value={filter} setFilter={setFilter}/>
       <h3>Add a new</h3>
       <PersonForm addPerson={addPerson} newName={newName} newNumber={newNumber} setNewName={setNewName} setNewNumber={setNewNumber} />
