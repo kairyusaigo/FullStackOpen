@@ -1,12 +1,16 @@
-const Country = ({name}) => {
-  return <div>{name}</div>
+const Country = ({name, selectCountry}) => {
+  return (
+    <div>
+      {name} <button onClick={selectCountry}>show</button>
+    </div>
+  )
 }
 
 const Language = ({lang}) => {
   return <li>{lang}</li>
 }
 
-const Countries = ({countries}) => {
+const Countries = ({countries, selectCountry}) => {
   if (countries.length > 10) {
     return <div>Too many matches, specify another filter</div>
   } if (countries.length === 1) {
@@ -27,7 +31,7 @@ const Countries = ({countries}) => {
   } else {
     return (
       <div>
-        {countries.map(country => <Country key={country.cca2} name={country.name.common} />)}
+        {countries.map(country => <Country key={country.cca2} name={country.name.common} selectCountry={() => selectCountry(country.cca2)}/>)}
       </div>
     )
   }

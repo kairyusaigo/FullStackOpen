@@ -17,6 +17,11 @@ const App = () => {
       })
   }, [])
 
+  const selectCountry = (cca2) => {
+    const selectedCountry = countries.find(country => country.cca2 === cca2)
+    setFilter(selectedCountry.name.common)
+  }
+
   const countryToShow = (filter=='')
     ? countries
     : countries.filter(country => country.name.common.toLowerCase().includes(filter.toLowerCase()))
@@ -24,7 +29,7 @@ const App = () => {
   return (
     <div>
       <Filter value={filter} setFilter={setFilter}/>
-      <Countries countries={countryToShow}/>
+      <Countries countries={countryToShow} selectCountry={selectCountry}/>
     </div>
   )
   
