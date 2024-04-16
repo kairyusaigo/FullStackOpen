@@ -6,16 +6,32 @@ import countriesServices from './services/countries'
 
 const App = () => {
   const [countries, setCountries] = useState([])
+  const [weather, setWeather] = useState([])
   const [filter, setFilter] = useState('')
 
   useEffect(() => {
     console.log('effect')
     countriesServices
-      .getAll()
+      .getCountries()
       .then(returnCountries => {
         setCountries(returnCountries)
       })
+      .catch (error => {console.log(error)})
   }, [])
+
+  useEffect(() => {
+    console.log('weather effect')
+    if (countries[0]) {
+      countriesServices
+        .getWeather(countries[0].capitalInfo.latlng[0],countries[0].capitalInfo.latlng[1])
+        .then(returnWeather => {
+          setWeather(returnWeather)
+          console.log('temp:',returnWeather.main.temp)
+        })
+        .catch (error => {console.log(error)})
+    }
+  }, [filter])
+
 
   const selectCountry = (cca2) => {
     const selectedCountry = countries.find(country => country.cca2 === cca2)
@@ -29,7 +45,7 @@ const App = () => {
   return (
     <div>
       <Filter value={filter} setFilter={setFilter}/>
-      <Countries countries={countryToShow} selectCountry={selectCountry}/>
+      <Countries countries={countryToShow} selectCountry={selectCountry} weather={weather} setWeather={setWeather}/>
     </div>
   )
   

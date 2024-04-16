@@ -1,15 +1,19 @@
 import axios from 'axios'
-const baseUrl = 'https://studies.cs.helsinki.fi/restcountries/api/'
+const api_key = import.meta.env.VITE_SOME_KEY
 
-const getAll = () => {
-    const request = axios.get(baseUrl+'all')
-    console.log(baseUrl+'all')
-    return request.then(response => response.data)
-  }
+const countriesUrl = 'https://studies.cs.helsinki.fi/restcountries/api/all'
 
-const getDetail = newObject => {
-  const request = axios.post(baseUrl, newObject)
+const getCountries = () => {
+  const request = axios.get(countriesUrl)
   return request.then(response => response.data)
 }
 
-export default { getAll, getDetail }
+const getWeather = (lat, lon) => {
+  const weatherUrl = 'https://api.openweathermap.org/data/2.5/weather?units=metric&lat='+lat+'&lon='+lon+'&appid='+api_key
+  console.log('weatherUrl',weatherUrl)
+  const request = axios.get(weatherUrl)
+  return request.then(response => response.data)
+}
+
+
+export default { getCountries, getWeather }
