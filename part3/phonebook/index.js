@@ -67,6 +67,27 @@ app.get('/api/persons/:id', (request, response) => {
   }
 })
 
+function getRandomInt(min, max) {
+  const minCeiled = Math.ceil(min);
+  const maxFloored = Math.floor(max);
+  return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
+}
+
+
+app.post('/api/persons', (request, response) => {
+  const body = request.body
+  
+  const person = {
+    name: body.name,
+    number: body.number,
+    id: getRandomInt(1000,99999),
+  }
+
+  persons = persons.concat(person)
+
+  response.json(person)
+})
+
 app.delete('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
 
