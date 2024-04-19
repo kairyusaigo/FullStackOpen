@@ -26,6 +26,28 @@ let persons = [
   }
 ]
 
+let options = {
+  weekday: "short",
+  month: "short",
+  year: "numeric",
+  day: "numeric",
+  hour: "numeric",
+  minute: "numeric",
+  second: "numeric",
+  hour12: false,
+  timeZone: "America/Toronto",
+  timeZoneName: "long",
+};
+
+app.get('/info', (request, response) => {
+  response.send(
+    `<p>
+      Phonebook has info for ${persons.length} people <br/>
+      ${new Intl.DateTimeFormat("en-US", options).format(new Date())} 
+    </p>`
+  )
+})
+
 app.get('/api/persons', (request, response) => {
     response.json(persons)
 })
