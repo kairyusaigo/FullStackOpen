@@ -106,7 +106,7 @@ app.post('/api/persons', (request, response) => {
 
   persons = persons.concat(person)
 
-  response.json(person)
+  response.status(201).json(person)
 })
 
 app.delete('/api/persons/:id', (request, response) => {
@@ -126,16 +126,16 @@ app.put('/api/persons/:id', (request, response) => {
     name: body.name,
     number: body.number
   }
-  
+
   console.log('personObject:', personObject)
   console.log('before mapping:', persons)
   persons = persons.map(person => person.id !== id ? person : personObject)
   console.log('after mapping:', persons)
 
-  response.json(personObject)
+  response.status(200).json(personObject)
 })
   
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
