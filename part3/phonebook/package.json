@@ -8,7 +8,9 @@
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy": "fly deploy",
-    "logs:prod": "fly logs"
+    "logs:prod": "fly logs",
+    "build:ui": "rm -rf dist && cd ../phonebook-frontend && npm run build && cp -r dist ../phonebook-backend",
+    "deploy:full": "npm run build:ui && npm run deploy"
   },
   "author": "",
   "license": "ISC",
