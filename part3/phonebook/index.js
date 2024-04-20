@@ -1,8 +1,10 @@
 const express = require('express')
-const app = express()
 const morgan = require('morgan')
+const cors = require('cors')
+const app = express()
 
 app.use(express.json())
+app.use(cors())
 
 morgan.token('body', req => {
   return JSON.stringify(req.body)
@@ -97,9 +99,9 @@ app.post('/api/persons', (request, response) => {
   }
 
   const person = {
-    name: body.name,
-    number: body.number,
     id: getRandomInt(1000,99999),
+    name: body.name,
+    number: body.number
   }
 
   persons = persons.concat(person)
@@ -110,10 +112,27 @@ app.post('/api/persons', (request, response) => {
 app.delete('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
 
-   //Filter out the matched id
-   persons = persons.filter(person => person.id !== id)
-
+  //Filter out the matched id
+  persons = persons.filter(person => person.id !== id)
   response.status(204).end()
+})
+
+app.put('/api/persons/:id', (request, response) => {
+  const body = request.body
+  const id = Number(request.params.id)
+
+  const personObject = {
+    id: id,
+    name: body.name,
+    number: body.number
+  }
+  
+  console.log('personObject:', personObject)
+  console.log('before mapping:', persons)
+  persons = persons.map(person => person.id !== id ? person : personObject)
+  console.log('after mapping:', persons)
+
+  response.json(personObject)
 })
   
 const PORT = 3001
