@@ -23,7 +23,7 @@ const personSchema = new mongoose.Schema({
   number: {
     type: String,
     validate: {
-      validator: (v) => { return /\d{2}-\d{6,}|\d{3}-\d{5,}/.test(v) },
+      validator: (v) => { return /^\d{2}-\d{6,}$|^\d{3}-\d{5,}$/.test(v) },
       message: props => `${props.value} is not a valid number!`
     },
     required: [true, 'Number required']
