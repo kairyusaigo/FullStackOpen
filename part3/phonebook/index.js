@@ -15,24 +15,24 @@ morgan.token('body', req => {
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 let options = {
-  weekday: "short",
-  month: "short",
-  year: "numeric",
-  day: "numeric",
-  hour: "numeric",
-  minute: "numeric",
-  second: "numeric",
+  weekday: 'short',
+  month: 'short',
+  year: 'numeric',
+  day: 'numeric',
+  hour: 'numeric',
+  minute: 'numeric',
+  second: 'numeric',
   hour12: false,
-  timeZone: "America/Toronto",
-  timeZoneName: "long",
-};
+  timeZone: 'America/Toronto',
+  timeZoneName: 'long',
+}
 
 app.get('/info', (request, response) => {
   Person.find({}).then(person => {
     response.send(
       `<p>
         Phonebook has info for ${person.length} people <br/>
-        ${new Intl.DateTimeFormat("en-US", options).format(new Date())} 
+        ${new Intl.DateTimeFormat('en-US', options).format(new Date())} 
       </p>`
     )
   })
@@ -61,8 +61,8 @@ app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
   if (!body.name || !body.number) {
-    return response.status(400).json({ 
-      error: 'name or number is missing' 
+    return response.status(400).json({
+      error: 'name or number is missing'
     })
   }
 
@@ -73,15 +73,16 @@ app.post('/api/persons', (request, response, next) => {
 
   console.log('person', person)
 
-  person.save().then(savedPerson => {
+  person.save()
+    .then(savedPerson => {
       response.json(savedPerson)
-  })
-  .catch(error => next(error))
+    })
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -91,7 +92,7 @@ app.put('/api/persons/:id', (request, response, next) => {
   const { name, number } = request.body
 
   Person.findByIdAndUpdate(
-    request.params.id, 
+    request.params.id,
     { name, number },
     { new: true, runValidators: true, context: 'query' }
   )
@@ -123,8 +124,8 @@ const errorHandler = (error, request, response, next) => {
 
 // handler of requests with result to errors
 app.use(errorHandler)
-  
+
 const PORT = process.env.PORT
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
+  console.log(`Server running on port ${PORT}`)
 })
